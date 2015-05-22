@@ -11,6 +11,7 @@
 
 //-----included dependencies
 #include <iostream>
+#include <fstream>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/count.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
@@ -20,13 +21,13 @@
 #include <boost/accumulators/statistics/min.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
 #include <boost/accumulators/statistics/tail_quantile.hpp>
-
+#include <math.h>
 
 
 //-----Class definitions
 #define GLOBALGRID_XDIM 360
 #define GLOBALGRID_YDIM 180
-
+#define MIN_POINTS_PER_BIN 500
 
 namespace ba = boost::accumulators;
 

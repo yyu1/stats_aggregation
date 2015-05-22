@@ -90,3 +90,25 @@ std::size_t GlobalStatsGrid::getCount(int x_ind, int y_ind) {
 		return 0;
 	}
 }
+
+void GlobalStatsGrid::writeToFile(std::ofstream *outfile) {
+	(*outfile) << "x_index,y_index,count,mean,min,max,median,variance,stdev" << std::endl;
+	for (int j=0; j<GLOBALGRID_YDIM; j++) {
+		for (int i=0; i<GLOBALGRID_XDIM; i++) {
+			if (this->getCount(i,j) >= MIN_POINTS_PER_BIN) {
+				(*outfile) << i << "," << j << "," << this->getCount(i,j) << ",";
+				(*outfile) << this->getMean(i,j) << ",";
+				(*outfile) << this->getMin(i,j) << ",";
+				(*outfile) << this->getMax(i,j) << ",";
+				(*outfile) << this->getMedian(i,j) << ",";
+				(*outfile) << this->getVariance(i,j) << ",";
+				(*outfile) << sqrt(this->getVariance(i,j)) << std::endl;
+				
+			}
+
+		}
+	}
+
+}
+
+
