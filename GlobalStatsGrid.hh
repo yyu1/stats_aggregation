@@ -10,16 +10,32 @@
 
 
 //-----included dependencies
-#include "GridBin.hh"
-
+#include <iostream>
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/count.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
+#include <boost/accumulators/statistics/median.hpp>
+#include <boost/accumulators/statistics/max.hpp>
+#include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/variance.hpp>
+#include <boost/accumulators/statistics/tail_quantile.hpp>
 
 
 
 //-----Class definitions
+#define GLOBALGRID_XDIM 360
+#define GLOBALGRID_YDIM 180
+
+
+namespace ba = boost::accumulators;
+
 class GlobalStatsGrid
 {
 private:
-	GridBin global_grid[360][180];
+  ba::accumulator_set<double, ba::features<ba::tag::mean, ba::tag::max, ba::tag::min, ba::tag::count, ba::tag::median, ba::tag::variance> > grid_accumulator[GLOBALGRID_XDIM][GLOBALGRID_YDIM];
+
+	bool inbounds(int xind, int yind);
 
 public:
 	void addValue(double val, float longitude, float latitude);
@@ -31,6 +47,8 @@ public:
 	double getMedian(int x_ind, int y_ind);
 	std::size_t getCount(int x_ind, int y_ind);
 	double getVariance(int x_ind, int y_ind);
+
+	void writeToFile(std::ofstream *outfile);
 
 };
 
