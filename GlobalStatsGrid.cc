@@ -57,7 +57,7 @@ double GlobalStatsGrid::getMax(int x_ind, int y_ind) {
 double GlobalStatsGrid::getMin(int x_ind, int y_ind) {
 	if (inbounds(x_ind,y_ind))
 	{
-		return ba::max(grid_accumulator[x_ind][y_ind]);
+		return ba::min(grid_accumulator[x_ind][y_ind]);
 	} else {
 		std::cout << "attempting to retrieve from xind,yind:" << x_ind << " " << y_ind << " is out of bounds, ignored.";
 		return 0;
@@ -95,6 +95,9 @@ void GlobalStatsGrid::writeToFile(std::ofstream *outfile) {
 	(*outfile) << "x_index,y_index,count,mean,min,max,median,variance,stdev" << std::endl;
 	for (int j=0; j<GLOBALGRID_YDIM; j++) {
 		for (int i=0; i<GLOBALGRID_XDIM; i++) {
+//			if (this->getCount(i,j) > 0) {  //debug
+//				std::cout << this->getCount(i,j) << " points at i, j" << i << " " << j << std::endl;
+//			}   // debug
 			if (this->getCount(i,j) >= MIN_POINTS_PER_BIN) {
 				(*outfile) << i << "," << j << "," << this->getCount(i,j) << ",";
 				(*outfile) << this->getMean(i,j) << ",";
@@ -110,5 +113,4 @@ void GlobalStatsGrid::writeToFile(std::ofstream *outfile) {
 	}
 
 }
-
 

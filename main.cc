@@ -1,29 +1,74 @@
+#define INPUT_BUFFER_SIZE 256   //256 characters per line of buffer for input
+#define FIELD_BUFFER_SIZE 64
+
 #include <iostream>
 
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/mean.hpp>
-#include <boost/accumulators/statistics/moment.hpp>
+#include "GlobalStatsGrid.hh"
 
 namespace ba = boost::accumulators;
 
 int main()
 {
 
-    // Define an accumulator set for calculating the mean and the
-    // 2nd moment ...
-    ba::accumulator_set<double, ba::stats<ba::tag::mean, ba::tag::moment<2> > > acc;
+		GlobalStatsGrid *global_grid = new GlobalStatsGrid();
 
-    // push in some data ...
-    acc(1.2);
-    acc(2.3);
-    acc(3.4);
-    acc(4.5);
 
-    // Display the results ...
-    std::cout << "Mean:   " << ba::mean(acc) << std::endl;
-    std::cout << "Moment: " << ba::moment<2>(acc) << std::endl;
+		//open input csv file
+		std::string in_file = "/Volumes/YifanLaCie1T/global/glas/lefsky/12_10_2012/global_hlorey_121012_wwfbiome_globcover_vcf_type_agb.csv";
 
+		char tmp_line[INPUT_BUFFER_SIZE];
+		char field_buffer[FIELD_BUFFER_SIZE];
+		std::ifstream input(in_file);
+		
+		std::vector<std::string> fields;
+
+		//read header line
+		input.getline(tmp_line, INPUT_BUFFER_SIZE);
+
+		register float longitude, latitude, agb;
+		//test read 20 lines
+//		for (int i=0; i<20; i++) {
+//			fields.clear();
+//			input.getline(tmp_line, INPUT_BUFFER_SIZE);
+
+		unsigned long line_counter = 2;
+		while(input.getline(tmp_line, INPUT_BUFFER_SIZE)) {
+			fields.clear();
+			
+			std::stringstream linestream(tmp_line);
+
+			while(linestream.getline(field_buffer,FIELD_BUFFER_SIZE,',')) {
+				fields.push_back(field_buffer);
+			}
+
+			std::vector<std::string>::iterator it = fields.begin();
+			//while(it != fields.end()) {
+			//	std::cout << (*it) << " ";
+			//	it++;
+			//}
+			//std::cout << std::endl;
+
+			//Convert fields to longitude, latitude, and AGB
+			try {
+				longitude = std::stof(fields[0]);
+				latitude = std::stof(fields[1]);
+				agb = std::stof(fields[10]);
+				if (agb > 0) global_grid->addValue(agb, longitude, latitude);
+			} catch (const std::invalid_argument& ia) {
+	  		std::cerr << "Invalid argument: " << ia.what() << "at line " << line_counter << std::endl;
+  		}
+			line_counter++;
+		}
+		
+
+		std::string out_file = "./testout.txt";
+
+		std::ofstream out_file_stream;
+		out_file_stream.open(out_file);
+		global_grid->writeToFile(&out_file_stream);
+
+
+		delete global_grid;
     return 0;
 
 }
