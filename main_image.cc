@@ -18,7 +18,8 @@ int main()
 	const unsigned int nrows_per_deg = ydim_pixels/latitude_span;
 	const double pixel_size = 0.00208333333333333;
 
-	const std::string in_file("/Volumes/wd_3t/maxent/250m/v4.2/biomass/maxent_agb_global_vcf5mask_v4.2.5_wd3_latlon.int");
+	//const std::string in_file("/Volumes/wd_3t/maxent/250m/v4.2/biomass/maxent_agb_global_vcf5mask_v4.2.5_wd3_latlon.int");
+	const std::string in_file("/Volumes/Global_250m/output/biomass/maxent_agb_global_vcf5mask_v4.2.5_wd3_latlon.int");
 	const std::string out_file("/Volumes/Global_250m/stats/maxent_agb_v4.2.5_wd3_1deg_stats.txt");
 
 	//---------------end config
@@ -49,7 +50,7 @@ int main()
 
 		//cycle through buffer and add >0 AGB values (can't use non-zero since -1 can be used for special purposes like water)
 		for (int i=0; i<xdim_pixels; i++) {
-			longitude = (int) (pixel_size * (double)xdim_pixels);
+			longitude = (int) (pixel_size * (double)i);
 			if (longitude == 360) longitude = 359; //fix edge of last pixel
 			for (int j=0; j<nrows_per_deg; j++) {
 				if (input_buffer[j][i] > 0) {
