@@ -52,7 +52,8 @@ int main()
 			try {
 				longitude = std::stof(fields[0]);
 				latitude = std::stof(fields[1]);
-				agb = std::stof(fields[10]);
+				//agb = std::stof(fields[10]);
+				agb = std::stof(fields[2]);  //hlorey
 				if (agb > 0) global_grid->addValue(agb, longitude, latitude);
 			} catch (const std::invalid_argument& ia) {
 	  		std::cerr << "Invalid argument: " << ia.what() << "at line " << line_counter << std::endl;
@@ -61,7 +62,7 @@ int main()
 		}
 		
 
-		std::string out_file = "./testout.txt";
+		std::string out_file = "./glas_stats_out_hlorey.txt";
 
 		std::ofstream out_file_stream;
 		out_file_stream.open(out_file);
