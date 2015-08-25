@@ -10,6 +10,7 @@
 #include <map>
 #include <sstream>
 #include <utility>
+#include <vector>
 
 inline int get_key(int x_ind, int y_ind) {
 	return x_ind * 1000 + y_ind;
@@ -23,21 +24,26 @@ std::pair<int,int> get_index(int key) {
 int main()
 {
 
-	std::map<int,float> glas_mean_values, image_mean_values;
+//	std::map<int,float> glas_mean_values, image_mean_values;
+	std::map<int,std::vector<float> > glas_values, image_values;
 
-	const std::string glas_file("/Volumes/Global_250m/stats/glas_v4.2.5_1deg_stats.txt");
-	const std::string maxent_file("/Volumes/Global_250m/stats/maxent_agb_v4.2.5_wd3_1deg_stats.txt");
+	//const std::string glas_file("/Volumes/Global_250m/stats/glas_v4.2.5_1deg_stats.txt");
+	//const std::string maxent_file("/Volumes/Global_250m/stats/maxent_agb_v4.2.5_wd3_1deg_stats.txt");
+	//const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_hlorey.txt");
+	//const std::string maxent_file("/Volumes/Global_250m/stats/maxent_hlorey_v4.2.5_1deg_stats.txt");
+	const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_hlorey_2deg.txt");
+	const std::string maxent_file("/Volumes/Global_250m/stats/maxent_hlorey_v4.2.5_2deg_stats.txt");
 
 	//input buffer
 	const int input_buffer_size = 256;
 	const int field_buffer_size = 64;
-	const int min_count = 2000;
+	const int min_count = 1000;
 	char line_buffer[input_buffer_size];
 	char field_buffer[field_buffer_size];
 
 
 	//temporary variables
-	register float agb;
+	register float value;
 	register int x_ind, y_ind, count;
 	std::vector<std::string> fields;
 	
@@ -61,8 +67,13 @@ int main()
 			x_ind = std::stoi(fields[0]);
 			y_ind = std::stoi(fields[1]);
 			count = std::stoi(fields[2]);
-			agb = std::stof(fields[3]);  //4th field for mean agb
-			if (count >= min_count) glas_mean_values[get_key(x_ind,y_ind)] = agb;
+			value = std::stof(fields[3]);  //4th field for mean value 
+			if (count >= min_count) {
+				std::vector<float> tmp_vector;
+				tmp_vector.push_back(value);
+				tmp_vector.push_back((float)count);
+				glas_values[get_key(x_ind,y_ind)] = tmp_vector;
+			}
 		} catch (const std::invalid_argument& ia) {
         std::cerr << "Invalid argument: " << ia.what() << "at line " << line_counter << std::endl;
     }
@@ -89,8 +100,14 @@ int main()
 		try {
 			x_ind = std::stoi(fields[0]);
 			y_ind = std::stoi(fields[1]);
-			agb = std::stof(fields[3]);  //4th field for mean agb
-			image_mean_values[get_key(x_ind,y_ind)] = agb;
+			count = std::stoi(fields[2]);
+			value = std::stof(fields[3]);  //4th field for mean value
+			if (count >= min_count) {
+				std::vector<float> tmp_vector;
+				tmp_vector.push_back(value);
+				tmp_vector.push_back(count);
+				image_values[get_key(x_ind,y_ind)] = tmp_vector;
+			}
 		} catch (const std::invalid_argument& ia) {
         std::cerr << "Invalid argument: " << ia.what() << "at line " << line_counter << std::endl;
     }
@@ -100,24 +117,25 @@ int main()
 	input_stream_image.close();
 
 
-	//std::cout << glas_mean_values.size() << ' ' << image_mean_values.size() << std::endl; //debug
 
 	//write output
 
-	const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_agb_matched_v4.2.5_2000min.txt");
+	//const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_agb_matched_v4.2.5_2000min.txt");
+	const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_hlorey_matched_v4.2.5_2deg.txt");
 
 	std::ofstream out_file_stream(out_file);
 
-	out_file_stream << "x_index,y_index,glas_mean_agb,maxent_mean_agb" << std::endl;
+	out_file_stream << "x_index,y_index,glas_mean_value,glas_count,maxent_mean_value,maxent_count" << std::endl;
 
-	std::map<int,float>::iterator it = glas_mean_values.begin();
+	std::map<int,std::vector<float> >::iterator it = glas_values.begin();
 
-	while(it != glas_mean_values.end()) {
-		std::map<int,float>::iterator image_it = image_mean_values.find((*it).first);
-		if (image_it != image_mean_values.end()) {
+	while(it != glas_values.end()) {
+		std::map<int,std::vector<float> >::iterator image_it = image_values.find((*it).first);
+		if (image_it != image_values.end()) {
 			std::pair<int,int> index_pair = get_index((*it).first);
 			out_file_stream << index_pair.first << "," << index_pair.second << ",";
-			out_file_stream << (*it).second << "," << (*image_it).second << std::endl;
+			out_file_stream << (*it).second[0] << "," << (*it).second[1] << ",";
+			out_file_stream << (*image_it).second[0] << "," << (*image_it).second[1] << std::endl;
 		}
 		it++;
 	}

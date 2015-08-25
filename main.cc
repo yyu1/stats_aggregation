@@ -62,7 +62,7 @@ int main()
 		}
 		
 
-		std::string out_file = "./glas_stats_out_hlorey.txt";
+		std::string out_file = "./glas_stats_out_hlorey_1deg_nomin.txt";
 
 		std::ofstream out_file_stream;
 		out_file_stream.open(out_file);
