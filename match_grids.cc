@@ -27,15 +27,15 @@ int main()
 //	std::map<int,float> glas_mean_values, image_mean_values;
 	std::map<int,std::vector<float> > glas_values, image_values;
 
-	//const std::string glas_file("/Volumes/Global_250m/stats/glas_v4.2.5_1deg_stats.txt");
-	//const std::string maxent_file("/Volumes/Global_250m/stats/maxent_agb_v4.2.5_wd3_1deg_stats.txt");
+	const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_agb_4.2.5_1deg_nomin.txt");
+	const std::string maxent_file("/Volumes/Global_250m/stats/maxent_agb_v4.2.5_wd3_1deg_stats.txt");
 	//const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_hlorey.txt");
 	//const std::string maxent_file("/Volumes/Global_250m/stats/maxent_hlorey_v4.2.5_1deg_stats.txt");
-	const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_hlorey_2deg.txt");
-	const std::string maxent_file("/Volumes/Global_250m/stats/maxent_hlorey_v4.2.5_2deg_stats.txt");
+	//const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_hlorey_2deg.txt");
+	//const std::string maxent_file("/Volumes/Global_250m/stats/maxent_hlorey_v4.2.5_2deg_stats.txt");
 
 	//input buffer
-	const int input_buffer_size = 256;
+	const int input_buffer_size = 512;
 	const int field_buffer_size = 64;
 	const int min_count = 1000;
 	char line_buffer[input_buffer_size];
@@ -121,7 +121,8 @@ int main()
 	//write output
 
 	//const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_agb_matched_v4.2.5_2000min.txt");
-	const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_hlorey_matched_v4.2.5_2deg.txt");
+	//const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_hlorey_matched_v4.2.5_2deg.txt");
+	const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_agb_matched_v4.2.5_1deg_1000min.txt");
 
 	std::ofstream out_file_stream(out_file);
 
