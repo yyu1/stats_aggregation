@@ -1,4 +1,4 @@
-#define INPUT_BUFFER_SIZE 256   //256 characters per line of buffer for input
+#define INPUT_BUFFER_SIZE 512   //512 characters per line of buffer for input
 #define FIELD_BUFFER_SIZE 64
 
 #include <iostream>
@@ -14,7 +14,7 @@ int main()
 
 
 		//open input csv file
-		std::string in_file = "/Volumes/YifanLaCie1T/global/glas/lefsky/12_10_2012/global_hlorey_121012_wwfbiome_globcover_vcf_type_agb.csv";
+		std::string in_file = "/Volumes/YifanLaCie1T/global/glas/lefsky/12_10_2012/global_hlorey_121012_wwfbiome_globcover_vcf_type_srtm_agb.csv";
 
 		char tmp_line[INPUT_BUFFER_SIZE];
 		char field_buffer[FIELD_BUFFER_SIZE];
@@ -52,8 +52,8 @@ int main()
 			try {
 				longitude = std::stof(fields[0]);
 				latitude = std::stof(fields[1]);
-				//agb = std::stof(fields[10]);
-				agb = std::stof(fields[2]);  //hlorey
+				agb = std::stof(fields[11]);  //AGB
+				//agb = std::stof(fields[2]);  //hlorey
 				if (agb > 0) global_grid->addValue(agb, longitude, latitude);
 			} catch (const std::invalid_argument& ia) {
 	  		std::cerr << "Invalid argument: " << ia.what() << "at line " << line_counter << std::endl;
@@ -62,7 +62,7 @@ int main()
 		}
 		
 
-		std::string out_file = "./glas_stats_out_hlorey_1deg_nomin.txt";
+		std::string out_file = "./glas_stats_out_agb_4.2.5_1deg_nomin.txt";
 
 		std::ofstream out_file_stream;
 		out_file_stream.open(out_file);

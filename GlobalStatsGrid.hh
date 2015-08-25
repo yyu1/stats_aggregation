@@ -27,8 +27,8 @@
 //-----Class definitions
 //#define GLOBALGRID_XDIM 360
 //#define GLOBALGRID_YDIM 180
-#define GLOBALGRID_XDIM 360  //2 deg x 2 deg
-#define GLOBALGRID_YDIM 180   //2 deg x 2 deg
+#define GLOBALGRID_XDIM 360  
+#define GLOBALGRID_YDIM 180 
 #define MIN_POINTS_PER_BIN 1
 
 namespace ba = boost::accumulators;
