@@ -45,6 +45,13 @@ double GlobalStatsGrid::getMean(int x_ind, int y_ind) {
 		return 0;
 	}
 }
+double GlobalStatsGrid::getMeanLatLon(float longitude, float latitude)
+{
+	int xind = (longitude + 180) / (360/GLOBALGRID_XDIM);
+	int yind = (90 - latitude) / (180/GLOBALGRID_YDIM);
+
+	return self.getMean(xind, yind);
+}
 double GlobalStatsGrid::getMax(int x_ind, int y_ind) {
 	if (inbounds(x_ind,y_ind)) 
 	{
@@ -113,4 +120,5 @@ void GlobalStatsGrid::writeToFile(std::ofstream *outfile) {
 	}
 
 }
+
 
