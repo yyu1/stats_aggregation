@@ -53,7 +53,7 @@ public:
 	double getVariance(int x_ind, int y_ind);
 
 	void writeToFile(std::ofstream *outfile);
-	void writeVCFWeightedMeanToFile(GlobalStatsGrid *vcfGrid, std::ofstream *outfile);
+	void writeVCFWeightedMeanToFile(std::ofstream *outfile);
 };
 
 #endif //__GLOBALSTATSGRID_HH_INCLUDED__

@@ -56,7 +56,7 @@ int main()
 				agb = std::stof(fields[11]);  //AGB
 				vcf = std::stof(fields[8]); //MODIS VCF
 				//agb = std::stof(fields[2]);  //hlorey
-				if (agb > 0) {
+				if (agb > 0 && vcf > 0 && vcf <= 100) {
 					//global_grid->addValue(agb, longitude, latitude);
 					vcf_grid->addValue(vcf, longitude, latitude);
 				}
@@ -70,13 +70,13 @@ int main()
 
 		//Reset input file pointer to beginning.
 		input.close();
-		input = std::ifstream(in_file, std::ifstream::in);
+		std::ifstream input2(in_file);
 	
 		//read header line
-        input.getline(tmp_line, INPUT_BUFFER_SIZE);
+        input2.getline(tmp_line, INPUT_BUFFER_SIZE);
 
 		line_counter = 2;
-		while(input.getline(tmp_line, INPUT_BUFFER_SIZE)) {
+		while(input2.getline(tmp_line, INPUT_BUFFER_SIZE)) {
             fields.clear();
 
             std::stringstream linestream(tmp_line);
@@ -99,8 +99,8 @@ int main()
                 agb = std::stof(fields[11]);  //AGB
                 vcf = std::stof(fields[8]); //MODIS VCF
                 //agb = std::stof(fields[2]);  //hlorey
-                if (agb > 0) {
-					float weight = vcf_grid.getMeanLatLon(longitude, latitude) / vcf;
+                if (agb > 0 && vcf > 0 && vcf <= 100) {
+					float weight = vcf_grid->getMeanLatLon(longitude, latitude) / vcf;
                     global_grid->addValue(agb*weight, longitude, latitude);
                     //vcf_grid->addValue(vcf, longitude, latitude);
                 }
@@ -114,7 +114,7 @@ int main()
 
 		std::ofstream out_file_stream;
 		out_file_stream.open(out_file);
-		global_grid->writeToFile(&out_file_stream);
+		global_grid->writeVCFWeightedMeanToFile(&out_file_stream);
 
 
 		delete global_grid;

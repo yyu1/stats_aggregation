@@ -50,7 +50,7 @@ double GlobalStatsGrid::getMeanLatLon(float longitude, float latitude)
 	int xind = (longitude + 180) / (360/GLOBALGRID_XDIM);
 	int yind = (90 - latitude) / (180/GLOBALGRID_YDIM);
 
-	return self.getMean(xind, yind);
+	return this->getMean(xind, yind);
 }
 double GlobalStatsGrid::getMax(int x_ind, int y_ind) {
 	if (inbounds(x_ind,y_ind)) 
@@ -114,6 +114,21 @@ void GlobalStatsGrid::writeToFile(std::ofstream *outfile) {
 				(*outfile) << this->getVariance(i,j) << ",";
 				(*outfile) << sqrt(this->getVariance(i,j)) << std::endl;
 				
+			}
+
+		}
+	}
+
+}
+
+
+void GlobalStatsGrid::writeVCFWeightedMeanToFile(std::ofstream *outfile) {
+	(*outfile) << "x_index,y_index,count,weighted_mean" << std::endl;
+	for (int j=0; j<GLOBALGRID_YDIM; j++) {
+		for (int i=0; i<GLOBALGRID_XDIM; i++) {
+			if (this->getCount(i,j) >= MIN_POINTS_PER_BIN) {
+				(*outfile) << i << "," << j << "," << this->getCount(i,j) << ",";
+				(*outfile) << this->getMean(i,j) << std::endl;
 			}
 
 		}
