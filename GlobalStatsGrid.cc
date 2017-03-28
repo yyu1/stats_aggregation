@@ -122,6 +122,36 @@ void GlobalStatsGrid::writeToFile(std::ofstream *outfile) {
 }
 
 
+void GlobalStatsGrid::writeToFileWithVCF(GlobalStatsGrid *vcf_grid, std::ofstream *outfile) {
+	(*outfile) << "x_index,y_index,count,agb_mean,agb_min,agb_max,agb_median,agb_variance,agb_stdev,vcf_mean,vcf_min,vcf_max,vcf_median,vcf_variance,vcf_stdev" << std::endl;
+	for (int j=0; j<GLOBALGRID_YDIM; j++) {
+		for (int i=0; i<GLOBALGRID_XDIM; i++) {
+//			if (this->getCount(i,j) > 0) {  //debug
+//				std::cout << this->getCount(i,j) << " points at i, j" << i << " " << j << std::endl;
+//			}   // debug
+			if (this->getCount(i,j) >= MIN_POINTS_PER_BIN) {
+				(*outfile) << i << "," << j << "," << this->getCount(i,j) << ",";
+				(*outfile) << this->getMean(i,j) << ",";
+				(*outfile) << this->getMin(i,j) << ",";
+				(*outfile) << this->getMax(i,j) << ",";
+				(*outfile) << this->getMedian(i,j) << ",";
+				(*outfile) << this->getVariance(i,j) << ",";
+				(*outfile) << sqrt(this->getVariance(i,j)) << ",";
+				(*outfile) << vcf_grid->getMean(i,j) << ",";
+				(*outfile) << vcf_grid->getMin(i,j) << ",";
+				(*outfile) << vcf_grid->getMax(i,j) << ",";
+				(*outfile) << vcf_grid->getMedian(i,j) << ",";
+				(*outfile) << vcf_grid->getVariance(i,j) << ",";
+				(*outfile) << sqrt(vcf_grid->getVariance(i,j)) << std::endl;
+				
+			}
+
+		}
+	}
+
+}
+
+
 void GlobalStatsGrid::writeVCFWeightedMeanToFile(std::ofstream *outfile) {
 	(*outfile) << "x_index,y_index,count,weighted_mean" << std::endl;
 	for (int j=0; j<GLOBALGRID_YDIM; j++) {

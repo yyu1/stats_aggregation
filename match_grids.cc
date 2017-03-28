@@ -27,12 +27,14 @@ int main()
 //	std::map<int,float> glas_mean_values, image_mean_values;
 	std::map<int,std::vector<float> > glas_values, image_values;
 
-	const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_agb_4.2.5_1deg_nomin.txt");
-	const std::string maxent_file("/Volumes/Global_250m/stats/maxent_agb_v4.2.5_wd3_1deg_stats.txt");
+	//const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_agb_4.2.5_1deg_nomin.txt");
+	//const std::string maxent_file("/Volumes/Global_250m/stats/maxent_agb_v4.2.5_wd3_1deg_stats.txt");
 	//const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_hlorey.txt");
 	//const std::string maxent_file("/Volumes/Global_250m/stats/maxent_hlorey_v4.2.5_1deg_stats.txt");
 	//const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_hlorey_2deg.txt");
 	//const std::string maxent_file("/Volumes/Global_250m/stats/maxent_hlorey_v4.2.5_2deg_stats.txt");
+	const std::string glas_file("/Volumes/Global_250m/stats/glas_stats_out_vcf_weighted_mean_agb_4.2.5_1deg_nomin.txt");
+	const std::string maxent_file("/Volumes/Global_250m/stats/maxent_agb_v4.2.5_wd3_1deg_stats.txt");
 
 	//input buffer
 	const int input_buffer_size = 512;
@@ -67,7 +69,9 @@ int main()
 			x_ind = std::stoi(fields[0]);
 			y_ind = std::stoi(fields[1]);
 			count = std::stoi(fields[2]);
-			value = std::stof(fields[3]);  //4th field for mean value 
+			//value = std::stof(fields[3]);  //4th field for mean value 
+			//value = std::stof(fields[6]);  //7th field for median value 
+			value = std::stof(fields[3]); //4th field for mean in vcf weighted mean
 			if (count >= min_count) {
 				std::vector<float> tmp_vector;
 				tmp_vector.push_back(value);
@@ -102,6 +106,7 @@ int main()
 			y_ind = std::stoi(fields[1]);
 			count = std::stoi(fields[2]);
 			value = std::stof(fields[3]);  //4th field for mean value
+			//value = std::stof(fields[6]);  //7th field for median value
 			if (count >= min_count) {
 				std::vector<float> tmp_vector;
 				tmp_vector.push_back(value);
@@ -122,7 +127,9 @@ int main()
 
 	//const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_agb_matched_v4.2.5_2000min.txt");
 	//const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_hlorey_matched_v4.2.5_2deg.txt");
-	const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_agb_matched_v4.2.5_1deg_1000min.txt");
+	//const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_mean_agb_matched_v4.2.5_1deg_1000min.txt");
+	//const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_median_agb_matched_v4.2.5_1deg_1000min.txt");
+	const std::string out_file("/Volumes/Global_250m/stats/glas_maxent_vcf_weighted_mean_agb_matched_v4.2.5_1deg_1000min.txt");
 
 	std::ofstream out_file_stream(out_file);
 
